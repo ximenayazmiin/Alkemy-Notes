@@ -1,20 +1,51 @@
-<template>
-        <nav class="flex justify-between p-2 gap-4 border-b-2 border-gray-200 "> 
-          <h1>Alkemy Notes</h1>
-          <ul class="flex gap-4" >
-            <li><nuxt-link to="/">Inicio</nuxt-link></li>
-            <li><nuxt-link to="/tareas">Tareas</nuxt-link></li>
-            <li><nuxt-link to="/">Nombre Usuario</nuxt-link></li>
-          </ul>
-        </nav>
-</template>
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import { Menu, X } from "lucide-vue-next";
 
-<script>
-export default {
+const isMobile = ref(false);
+const menuOpen = ref(false);
 
-}
+// Función para detectar si es móvil
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 768;
+};
+
+// Detecta cambios en la pantalla
+onMounted(() => {
+  checkMobile();
+  window.addEventListener("resize", checkMobile);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", checkMobile);
+});
 </script>
 
-<style>
+<template>
+  <nav class="bg-white p-4  flex justify-between items-center border-b-2 border-gray-200 ">
+    <nuxt-link to="/"><h1 class="text-xl font-bold">Alkemy Notes</h1></nuxt-link>
 
-</style>
+    <!-- Botón de menú hamburguesa en móviles -->
+    <button v-if="isMobile" @click="menuOpen = !menuOpen" class="md:hidden">
+      <component :is="menuOpen ? X : Menu" size="28" />
+    </button>
+
+    <!-- Menú -->
+    <ul
+      :class="[
+        isMobile ? (menuOpen ? 'block' : 'hidden') : 'flex gap-6',
+        'absolute md:static top-16 left-0 w-full md:w-auto  bg-slate-100 border-gray-200 md:bg-transparent md:flex',
+      ]"
+    >
+      <li>
+        <NuxtLink class=" flex p-2 md:p-0 hover:bg-slate-400 md:hover:bg-transparent" to="/">Inicio</NuxtLink>
+      </li>
+      <li >
+        <NuxtLink class=" flex p-2 md:p-0 hover:bg-slate-400 md:hover:bg-transparent" to="/tareas">Tareas</NuxtLink>
+      </li>
+      <li>
+        <NuxtLink class=" flex p-2 md:p-0 hover:bg-slate-400 md:hover:bg-transparent" to="/">ximena@yazmin.com</NuxtLink>
+      </li>
+    </ul>
+  </nav>
+</template>

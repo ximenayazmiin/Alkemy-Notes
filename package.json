@@ -13,6 +13,7 @@
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@nuxtjs/tailwindcss": "npm:@nuxtjs/tailwindcss@nightly",
     "font-awesome": "^4.7.0",
+    "lucide-vue-next": "^0.475.0",
     "nuxt": "^3.15.4",
     "vue": "latest",
     "vue-router": "latest"
