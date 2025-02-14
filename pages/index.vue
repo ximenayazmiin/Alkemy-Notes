@@ -18,6 +18,9 @@
 
 <script setup>
 const router = useRouter();
+const {
+  public: { apiBaseUrl },
+} = useRuntimeConfig();
 
 const tarea = ref({
   descripcion: null,
@@ -29,7 +32,8 @@ async function createTask() {
     alert("Debes escribir una tarea");
     return;
   }
-  const { data, status } = await useFetch("http://localhost:3002/tarea", {
+
+  const { data, status } = await useFetch(`${apiBaseUrl}/tarea`, {
     method: "POST",
     body: tarea.value,
   });
