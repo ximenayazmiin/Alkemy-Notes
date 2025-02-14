@@ -33,12 +33,12 @@
         ></label
       >
     </div>
-    <template v-if="tareas_data != null && tareas_data != 1">
+    <template v-if="tareas != null && tareas != 0">
       <div class="grid sm:grid-cols-4 grid-cols-2 gap-4">
         <TareasCard v-for="tarea in tareas" :key="tarea.id" :tarea="tarea"></TareasCard>
       </div>
     </template>
-    <template v-else-if="tareas_data == 1">
+    <template v-else-if="tareas === 1">
       <div class="flex justify-center items-center h-96">
         <h2 class="text-2xl font-medium">No hay tareas</h2>
       </div>
@@ -53,6 +53,7 @@
 
 <script setup>
 import { useTareasStore } from "~/store/tareas";
+
 const { getTareas2, tareas_data } = useTareasStore();
 
 const tareasCompletas = computed(() => {
@@ -65,6 +66,7 @@ const tareasInompletas = computed(() => {
 });
 
 await getTareas2();
+const tareas = ref(tareas_data);
 
 function borrarTodas() {
   console.log("Todas las tareas eliminadas");

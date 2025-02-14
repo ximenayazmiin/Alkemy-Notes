@@ -28,10 +28,11 @@
 
 <script setup>
 const router = useRouter();
+const { public: { apiBaseUrl } } = useRuntimeConfig();
 const tarea_id = router.currentRoute.value.params.id;
 
 async function getTareas() {
-  const { data, status } = await useFetch(`http://localhost:3002/tarea/${tarea_id}`, {
+  const { data, status } = await useFetch(`${apiBaseUrl}/tarea/${tarea_id}`, {
     method: "GET",
   });
   if (status.value) {

@@ -40,7 +40,9 @@
 
 <script setup>
 import { useTareasStore } from "~/store/tareas";
-const { getTareas2 } = useTareasStore();
+const {
+  public: { apiBaseUrl },
+} = useRuntimeConfig();
 
 const props = defineProps({
   tarea: {
@@ -49,7 +51,6 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["actualizarTareas", "actualizarTarea"]);
 const ver_opciones = ref(false);
 function marcar(nuevoEstado) {
   props.tarea.estatus = nuevoEstado;
@@ -58,7 +59,7 @@ function marcar(nuevoEstado) {
 
 async function editarTarea() {
   const { data, status } = await useFetch(
-    `http://localhost:3002/tarea/${props.tarea.id_tarea}`,
+    `${apiBaseUrl}/tarea/${props.tarea.id_tarea}`,
     {
       method: "PUT",
       body: { descripcion: props.tarea.descripcion, estatus: props.tarea.estatus },
@@ -68,14 +69,14 @@ async function editarTarea() {
 
 async function eliminar() {
   const { data, status } = await useFetch(
-    `http://localhost:3002/tarea/${props.tarea.id_tarea}`,
+    `${apiBaseUrl}/tarea/${props.tarea.id_tarea}`,
     {
       method: "DELETE",
     }
   );
   ver_opciones.value = false;
   if (status == "success") {
-    await getTareas2();
+
   } else {
     alert("Ocurrió un error al eliminar la tarea");
   }
