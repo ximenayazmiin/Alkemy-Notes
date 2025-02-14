@@ -21,38 +21,26 @@
 import { ref, computed } from 'vue';
 
 const tareasCompletas = computed(() => {
-    return tareas.value.filter(tarea => tarea.estado).length;
+    return tareas.value.filter(tarea => tarea.estatus).length;
 });
 const tareasInompletas = computed(() => {
-    return tareas.value.filter(tarea => tarea.estado == false).length;
+    return tareas.value.filter(tarea => tarea.estatus == false).length;
 });
 
-const tareas = ref([
-    {   id:1,
-        texto: 'Traer leche',
-        estado: false
-    },
-    {
-        id:2,
-        texto: 'Sacar al perro',
-        estado: true
-    },
-    {
-        id:3,
-        texto: 'Hacer la tarea',
-        estado: false
-    },
-    {
-        id:4,
-        texto: 'Estudiar',
-        estado: true
-    },
-    {
-        id:5,
-        texto: 'Estudiar frances',
-        estado: false
-    }
-]);
+async function getTareas(){
+    const { data, error} = await useFetch('http://localhost:3002/tareas', {
+    method: 'GET'
+    })
+    return data.value
+}
+function handleActualizarTareas(id_tarea) {
+    console.log(`Tarea eliminada con ID: ${id_tarea}`);
+}
+  
+
+const tareas = ref(null) 
+tareas.value = await getTareas();
+
 
 
 </script>
