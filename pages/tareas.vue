@@ -76,16 +76,19 @@ onMounted(() => {
  useStore.getTareas2();
 });
 
-
- function borrarTodas() {
-   tareas_data.value.map((tarea) => {
-     let {data } = useFetch(
-    `${apiBaseUrl}/tarea/${tarea.id_tarea}`,
-       { method: "Delete" });
-    
-  })
-  useStore.getTareas2();
-  console.log("Todas las tareas eliminadas");
+async function borrarTodas() {
+  try {
+    await Promise.all(
+      tareas_data.value.map(async (tarea) => {
+        await useFetch(`${apiBaseUrl}/tarea/${tarea.id_tarea}`, {
+          method: "DELETE",
+        });
+      })
+    );
+    await useStore.getTareas2();
+  } catch (error) {
+    console.error("Error al borrar las tareas:", error);
+  }
 }
 
 const isDisabled = computed(() => tareas_data.value === 1 || tareas_data.value === null);
