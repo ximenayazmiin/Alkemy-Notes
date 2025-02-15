@@ -33,46 +33,62 @@
         ></label
       >
     </div>
-    <template v-if="tareas != null && tareas != 0">
+    <template v-if="tareas_data != null && tareas_data != 1">
       <div class="grid sm:grid-cols-4 grid-cols-2 gap-4">
-        <TareasCard v-for="tarea in tareas" :key="tarea.id" :tarea="tarea"></TareasCard>
+        <TareasCard v-for="tarea in tareas_data" :key="tarea.id" :tarea="tarea"></TareasCard>
       </div>
     </template>
-    <template v-else-if="tareas === 1">
-      <div class="flex justify-center items-center h-96">
+    <template v-else-if=" tareas_data === 1">
+     <div class="grid sm:grid-cols-4 grid-cols-2 gap-4">
         <h2 class="text-2xl font-medium">No hay tareas</h2>
       </div>
     </template>
     <template v-else>
-      <div class="flex justify-center items-center h-96">
-        <h2 class="text-2xl font-medium">Cargando...</h2>
+     <div class="grid sm:grid-cols-4 grid-cols-2 gap-4">
+        <h2 class="text-2xl font-mtareas_dataedium">Cargando...</h2>
       </div>
     </template>
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { useTareasStore } from "~/store/tareas";
+const {
+  public: { apiBaseUrl },
+} = useRuntimeConfig();
 
-const { getTareas2, tareas_data } = useTareasStore();
+ const useStore = useTareasStore();
 
 const tareasCompletas = computed(() => {
-  if (tareas_data == 1 || tareas_data == null) return 0;
-  else return tareas_data.filter((tarea) => tarea.estatus).length;
+  if (tareas_data.value == 1 || tareas_data.value == null) return 0;
+  else return tareas_data.value.filter((tarea) => tarea.estatus).length;
 });
 const tareasInompletas = computed(() => {
-  if (tareas_data == 1 || tareas_data == null) return 0;
-  else return tareas_data.filter((tarea) => tarea.estatus == false).length;
+  if (tareas_data.value == 1 || tareas_data.value == null) return 0;
+  else return tareas_data.value.filter((tarea) => tarea.estatus == false).length;
 });
 
-await getTareas2();
-const tareas = ref(tareas_data);
+await useStore.getTareas2();
 
-function borrarTodas() {
+const  tareas_data = computed(() => useStore.tareas_data);
+onMounted(() => {
+ useStore.getTareas2();
+});
+
+
+ function borrarTodas() {
+   tareas_data.value.map((tarea) => {
+     let {data } = useFetch(
+    `${apiBaseUrl}/tarea/${tarea.id_tarea}`,
+       { method: "Delete" });
+    
+  })
+  useStore.getTareas2();
   console.log("Todas las tareas eliminadas");
 }
 
-const isDisabled = computed(() => tareas_data === 1 || tareas_data === null);
+const isDisabled = computed(() => tareas_data.value === 1 || tareas_data.value === null);
 </script>
 
 <style></style>

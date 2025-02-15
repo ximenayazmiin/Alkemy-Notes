@@ -47,6 +47,6 @@ async function createTask() {
 
 <style>
 .full-page {
-  height: calc(100vh - 84px);
+  min-height: calc(100vh - 84px);
 }
 </style>

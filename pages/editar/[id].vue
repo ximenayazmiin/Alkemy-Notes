@@ -31,7 +31,7 @@ const router = useRouter();
 const { public: { apiBaseUrl } } = useRuntimeConfig();
 const tarea_id = router.currentRoute.value.params.id;
 
-async function getTareas() {
+async function getTarea() {
   const { data, status } = await useFetch(`${apiBaseUrl}/tarea/${tarea_id}`, {
     method: "GET",
   });
@@ -47,7 +47,7 @@ async function getTareas() {
 }
 
 const tarea = ref(null);
-tarea.value = await getTareas();
+tarea.value = await getTarea();
 
 const isDisabled = computed(() => tarea.value === 1);
 
@@ -57,19 +57,16 @@ if (!isDisabled.value) {
 }
 
 async function editarTarea() {
-  if (descripcion.value === null || descripcion.value == "") {
-    alert("El campo de tarea no puede estar vacío");
-    return;
-  }
-  const { data, status } = await useFetch(`http://localhost:3002/tarea/${tarea_id}`, {
-    method: "PUT",
-    body: { descripcion: descripcion.value, estatus: tarea.value.estatus },
-  });
-  if (status.value) {
-    router.push("/tareas");
-  } else {
-    alert("Ocurrió un error al editar la tarea");
-  }
+  const { data, status } = await useFetch(
+    `${apiBaseUrl}/tarea/${tarea_id}`,
+    {
+      method: "PUT",
+      body: { descripcion: descripcion.value, estatus: tarea.value.estatus },
+    }
+  );
+   if (status.value == "success")
+    {router.push("/tareas") }
+  else {alert("Ocurrió un error al editar la tarea");}
 }
 </script>
 

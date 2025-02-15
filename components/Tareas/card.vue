@@ -40,6 +40,7 @@
 
 <script setup>
 import { useTareasStore } from "~/store/tareas";
+const { getTareas2, tareas_data } = useTareasStore()
 const {
   public: { apiBaseUrl },
 } = useRuntimeConfig();
@@ -68,18 +69,15 @@ async function editarTarea() {
 }
 
 async function eliminar() {
-  const { data, status } = await useFetch(
+  let { data, status } = await useFetch(
     `${apiBaseUrl}/tarea/${props.tarea.id_tarea}`,
-    {
-      method: "DELETE",
+    { method: "Delete"});
+    ver_opciones.value = false;
+  if (data) {
+     tareas_data.value =  getTareas2();
     }
-  );
-  ver_opciones.value = false;
-  if (status == "success") {
-
-  } else {
-    alert("Ocurrió un error al eliminar la tarea");
-  }
+    
+ 
 }
 
 function editar() {
